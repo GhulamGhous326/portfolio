@@ -99,6 +99,8 @@
     var text = el('span');
     if (kind === 'not_configured') {
       text.innerHTML = 'Chat is not set up yet. Reach Ghulam at <a href="mailto:ghulamghous208@mail.com">ghulamghous208@mail.com</a>.';
+    } else if (kind === 'not_found') {
+      text.textContent = 'Chat service not found. It works only on the deployed site, not in local preview.';
     } else if (kind === 'rate_limited') {
       text.textContent = 'Too many messages right now. Please try again in a bit.';
     } else {
@@ -169,7 +171,11 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ messages: history })
     }).then(function (r) {
-      return r.json().then(function (data) { return { status: r.status, data: data }; });
+      if (r.status === 404) return { status: 404, data: { error: 'not_found' } };
+      return r.json().then(
+        function (data) { return { status: r.status, data: data }; },
+        function () { return { status: r.status, data: { error: 'bad_response' } }; }
+      );
     }).then(function (res) {
       thinking.remove();
       setSending(false);
