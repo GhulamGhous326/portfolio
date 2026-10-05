@@ -227,23 +227,6 @@ a { color: inherit; text-decoration: none; }
 
 /* ============ SKILLS ============ */
 .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px 60px; margin-top: 10px; }
-.skill-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 10px; font-size: 0.98rem; }
-.skill-top .lvl { color: var(--muted); font-size: 0.82rem; letter-spacing: 0.08em; }
-.skill-top .lvl.gold { color: var(--gold); }
-.bar { height: 2px; background: rgba(255,255,255,0.08); border-radius: 2px; overflow: hidden; }
-.bar span { display: block; height: 100%; background: linear-gradient(90deg, var(--teal), rgba(111,227,208,0.4)); border-radius: 2px; }
-.bar span.learning { background: linear-gradient(90deg, var(--gold), rgba(217,167,95,0.4)); }
-.exploring { margin-top: 44px; color: var(--muted); font-size: 1rem; }
-.exploring strong { color: var(--gold); font-weight: 500; }
-
-/* ============ CONTACT ============ */
-.contact-wrap { max-width: 720px; }
-.contact-form { display: grid; gap: 18px; margin: 38px 0 26px; }
-.contact-form input, .contact-form textarea {
-  background: transparent; border: 0; border-bottom: 1px solid var(--line);
-  padding: 14px 4px; color: var(--ink); font-family: var(--font-body); font-size: 1rem;
-  transition: border-color 0.3s; resize: vertical;
-}
 .contact-form input:focus, .contact-form textarea:focus { outline: none; border-bottom-color: var(--teal); }
 .contact-form input::placeholder, .contact-form textarea::placeholder { color: rgba(143, 165, 160, 0.55); }
 .contact-form .btn-pill { justify-self: start; background: none; cursor: pointer; font-size: 0.9rem; }
@@ -386,3 +369,16 @@ a.info-card:hover { border-color: rgba(111, 227, 208, 0.4); transform: translate
   padding: 7px 16px; margin-bottom: 16px;
 }
 .info-card .info-icon svg { width: 20px; height: 20px; }
+
+/* ============ PHASE 4: SKILL CARDS ============ */
+.skill-card {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+  padding: 28px; transition: border-color 0.3s, transform 0.3s;
+}
+.skill-card:hover { border-color: rgba(111, 227, 208, 0.35); transform: translateY(-4px); }
+.skill-card h3 { font-size: 1.08rem; font-weight: 500; margin-bottom: 8px; letter-spacing: 0.02em; }
+.skill-card > p { color: var(--muted); font-size: 0.92rem; margin-bottom: 4px; }
+.skill-card .proof { font-size: 0.82rem; color: var(--teal); margin-top: 10px; margin-bottom: 0; }
+.skill-card .proof a { color: var(--teal); border-bottom: 1px solid rgba(111, 227, 208, 0.4); padding-bottom: 1px; }
+.skill-card.learning { border-style: dashed; border-color: rgba(217, 167, 95, 0.35); }
+.skill-card.learning:hover { border-color: rgba(217, 167, 95, 0.6); }
