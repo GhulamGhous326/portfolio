@@ -1,0 +1,20 @@
+# Ghulam Ghous — Frontend Developer
+
+> Frontend developer in Lahore, Pakistan (PKT, UTC+5), building fast, accessible web interfaces. Open to full-time, freelance, contract and remote roles.
+
+## Contact
+- Email: ghulamghous208@mail.com
+- Portfolio: https://ghulamghousdev.netlify.app/
+- GitHub: https://github.com/GhulamGhous326
+- LinkedIn: https://www.linkedin.com/in/ghulamghous208/
+- WhatsApp: https://wa.me/923101714299
+
+## Projects
+- Rook.pk (https://rook.pk/): live WooCommerce clothing store for a Pakistani streetwear brand, designed and developed independently on WordPress and WooCommerce. Case study: https://ghulamghousdev.netlify.app/projects/rook-pk.html
+- Luxe Boutique (https://luxeboutiquee.netlify.app/): practice e-commerce front end in HTML/CSS/JavaScript.
+- College Website Clone (https://collegewebsiteclone.netlify.app/): practice build focused on layout and responsive design.
+
+## Skills
+Core: HTML5, CSS3, JavaScript (ES6+), WordPress, WooCommerce, Elementor, Responsive Design.
+Tooling: Git & GitHub, Netlify, Tailwind CSS.
+Currently learning: MERN stack (MongoDB, Express, React, Node.js), REST APIs, AI chat interfaces.
