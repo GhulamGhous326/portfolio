@@ -1,10 +1,7 @@
 // Ask Ghulam - portfolio chatbot backend (Netlify Function).
-// The OpenAI API key lives ONLY in the Netlify environment variable OPENAI_API_KEY.
-// It is never sent to the browser.
-//
-// v1 note: returns a complete JSON reply (no SSE streaming). The widget reveals
-// the reply with a typewriter effect. True streaming is a documented follow-up;
-// standard Netlify Functions do not support streaming responses.
+// Uses the Google Gemini API FREE tier. The API key lives ONLY in the
+// Netlify environment variable GEMINI_API_KEY. It is never sent to the browser.
+// Get a free key at https://aistudio.google.com/ (no credit card needed).
 
 const DATA = require('./ghulam.json');
 
@@ -45,7 +42,7 @@ const json = (statusCode, obj) => ({
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return json(405, { error: 'method_not_allowed' });
 
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return json(503, { error: 'not_configured' });
 
   const fwd = event.headers['x-forwarded-for'] || event.headers['client-ip'] || '';
@@ -66,27 +63,28 @@ exports.handler = async (event) => {
     if (typeof m.content !== 'string') continue;
     const content = m.content.slice(0, 500).trim();
     if (!content) continue;
-    messages.push({ role: m.role, content });
+    // Gemini uses "model" for the assistant role
+    messages.push({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: content }] });
   }
   if (messages.length === 0 || messages[messages.length - 1].role !== 'user') {
     return json(400, { error: 'bad_request' });
   }
 
-  const model = process.env.OPENAI_MODEL || 'gpt-4o-mini';
+  const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
 
   let resp;
   try {
-    resp = await fetch('https://api.openai.com/v1/chat/completions', {
+    resp = await fetch(url, {
       method: 'POST',
       headers: {
-        Authorization: 'Bearer ' + apiKey,
+        'x-goog-api-key': apiKey,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model,
-        max_tokens: 300,
-        temperature: 0.4,
-        messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...messages],
+        systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        contents: messages,
+        generationConfig: { maxOutputTokens: 300, temperature: 0.4 },
       }),
     });
   } catch {
@@ -102,9 +100,13 @@ exports.handler = async (event) => {
     return json(502, { error: 'upstream_error' });
   }
 
-  const reply = data && data.choices && data.choices[0] && data.choices[0].message
-    ? String(data.choices[0].message.content || '').slice(0, 1500)
-    : '';
+  let reply = '';
+  try {
+    const parts = data.candidates[0].content.parts;
+    reply = parts.map((p) => p.text || '').join('').slice(0, 1500);
+  } catch {
+    reply = '';
+  }
   if (!reply) return json(502, { error: 'upstream_error' });
 
   return json(200, { reply });

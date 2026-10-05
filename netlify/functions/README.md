@@ -9,17 +9,20 @@ prompt refuses out-of-scope questions and treats user input as untrusted.
 - `ghulam.json` - structured profile data (skills, projects, contact, availability).
   Edit this to update what the chatbot knows.
 - `chat.js` - Netlify Function (`POST /.netlify/functions/chat`). Reads
-  `OPENAI_API_KEY` from the environment, validates and rate-limits input,
-  calls the OpenAI chat completions API, returns `{ reply }` as JSON.
+  `GEMINI_API_KEY` from the environment, validates and rate-limits input,
+  calls the Google Gemini API (free tier), returns `{ reply }` as JSON.
 - `../../chat-widget.js` - vanilla-JS floating chat widget (all pages).
   Streaming-style typewriter reveal, suggestions, error/retry states,
   keyboard support (Escape closes), visible "AI-generated" label.
 
 ## Setup (owner must do this)
 
-1. In the Netlify dashboard: Site settings > Environment variables >
-   add `OPENAI_API_KEY` (get one at platform.openai.com).
-   Optional: `OPENAI_MODEL` (default `gpt-4o-mini`).
+1. Get a FREE key at https://aistudio.google.com/ ("Get API key" - no
+   credit card needed for the free tier; skip/close any "Set up billing"
+   dialog, that is the paid flow).
+2. In the Netlify dashboard: Site settings > Environment variables >
+   add `GEMINI_API_KEY` with your key.
+   Optional: `GEMINI_MODEL` (default `gemini-2.0-flash`).
 2. Deploy this folder with the site (drag-drop ZIP works; `netlify/functions`
    is auto-detected).
 3. Without the key, the widget shows "Chat is not set up yet" and the
@@ -44,4 +47,4 @@ prompt refuses out-of-scope questions and treats user input as untrusted.
 
 - Answers are only as current as `ghulam.json` - update it when facts change.
 - No conversation memory across page loads (history lives in the widget only).
-- Costs: each message is one OpenAI API call on the owner's key.
+- Costs: free tier - each message is one Gemini API call on the owner's free quota.
