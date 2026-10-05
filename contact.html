@@ -75,7 +75,7 @@
             <span><strong>WhatsApp</strong><small>+92 310 1714299</small></span>
             <span class="arrow">→</span>
           </a>
-            <span><strong>Based in</strong><small>Lahore, Pakistan · Remote OK</small></span>
+            <span><strong>Based in</strong><small>Lahore, Pakistan (PKT, UTC+5) · Remote OK</small></span>
           </div>
           <div class="info-card reveal">
             <span class="info-icon">
@@ -84,10 +84,18 @@
             <span><strong>Availability</strong><small>Open to work · freelance & roles</small></span>
           </div>
         </div>
-        <form class="contact-form reveal" action="https://formspree.io/f/xkgvwkrj" method="POST">
-          <input type="text" name="name" placeholder="Your name" required />
+        <form class="contact-form reveal" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html">
+          <input type="hidden" name="form-name" value="contact" />
+          <p style="display:none"><label>Don\'t fill this out if you\'re human: <input name="bot-field" /></label></p>
+          <input type="text" name="name" placeholder="Your name" required minlength="2" />
           <input type="email" name="email" placeholder="Your email" required />
-          <textarea name="message" rows="5" placeholder="Your message" required></textarea>
+          <select name="inquiry-type" aria-label="Inquiry type">
+            <option value="general">General inquiry</option>
+            <option value="full-time">Full-time role</option>
+            <option value="freelance">Freelance project</option>
+            <option value="contract">Contract work</option>
+          </select>
+          <textarea name="message" rows="5" placeholder="Your message" required minlength="10"></textarea>
           <button type="submit" class="btn-pill">Send Message <span class="arrow">→</span></button>
         </form>
       </div>
