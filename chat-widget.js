@@ -103,6 +103,16 @@
       text.textContent = 'Chat service not found. It works only on the deployed site, not in local preview.';
     } else if (kind === 'rate_limited') {
       text.textContent = 'Too many messages right now. Please try again in a bit.';
+    } else if (kind === 'upstream_key') {
+      text.textContent = 'Chat key issue (400). The site owner should check the API key value.';
+    } else if (kind === 'upstream_forbidden') {
+      text.textContent = 'Chat key blocked (403). The site owner should check key restrictions.';
+    } else if (kind === 'upstream_model') {
+      text.textContent = 'Chat model issue (404). The site owner should update the model name.';
+    } else if (kind === 'upstream_quota') {
+      text.textContent = 'Chat is over its free quota right now. Please try again later.';
+    } else if (kind === 'upstream_noreply') {
+      text.textContent = 'Chat returned no reply. Please try again.';
     } else {
       text.textContent = 'Something went wrong. ';
       var retry = el('button', 'chat-retry', 'Retry');

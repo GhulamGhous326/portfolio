@@ -42,7 +42,7 @@ const json = (statusCode, obj) => ({
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return json(405, { error: 'method_not_allowed' });
 
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = (process.env.GEMINI_API_KEY || '').trim();
   if (!apiKey) return json(503, { error: 'not_configured' });
 
   const fwd = event.headers['x-forwarded-for'] || event.headers['client-ip'] || '';
@@ -91,7 +91,14 @@ exports.handler = async (event) => {
     return json(502, { error: 'upstream_error' });
   }
 
-  if (!resp.ok) return json(502, { error: 'upstream_error' });
+  if (!resp.ok) {
+    const s = resp.status;
+    if (s === 400) return json(502, { error: 'upstream_key' });
+    if (s === 401 || s === 403) return json(502, { error: 'upstream_forbidden' });
+    if (s === 404) return json(502, { error: 'upstream_model' });
+    if (s === 429) return json(502, { error: 'upstream_quota' });
+    return json(502, { error: 'upstream_error' });
+  }
 
   let data;
   try {
@@ -107,7 +114,7 @@ exports.handler = async (event) => {
   } catch {
     reply = '';
   }
-  if (!reply) return json(502, { error: 'upstream_error' });
+  if (!reply) return json(502, { error: 'upstream_noreply' });
 
   return json(200, { reply });
 };
