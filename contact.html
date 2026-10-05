@@ -106,12 +106,19 @@
           <p style="display:none"><label>Don\'t fill this out if you\'re human: <input name="bot-field" /></label></p>
           <input type="text" name="name" placeholder="Your name" required minlength="2" />
           <input type="email" name="email" placeholder="Your email" required />
-          <select name="inquiry-type" aria-label="Inquiry type">
-            <option value="general">General inquiry</option>
-            <option value="full-time">Full-time role</option>
-            <option value="freelance">Freelance project</option>
-            <option value="contract">Contract work</option>
-          </select>
+          <div class="custom-select">
+            <button type="button" class="cs-button" aria-haspopup="listbox" aria-expanded="false" aria-label="Inquiry type">
+              <span class="cs-value">General inquiry</span>
+              <svg class="cs-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="cs-list" role="listbox" aria-label="Inquiry type" hidden>
+              <li role="option" data-value="general" aria-selected="true" class="selected">General inquiry</li>
+              <li role="option" data-value="full-time" aria-selected="false">Full-time role</li>
+              <li role="option" data-value="freelance" aria-selected="false">Freelance project</li>
+              <li role="option" data-value="contract" aria-selected="false">Contract work</li>
+            </ul>
+            <input type="hidden" name="inquiry-type" value="general" />
+          </div>
           <textarea name="message" rows="5" placeholder="Your message" required minlength="10"></textarea>
           <button type="submit" class="btn-pill">Send Message <span class="arrow">→</span></button>
         </form>

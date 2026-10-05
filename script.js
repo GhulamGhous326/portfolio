@@ -70,3 +70,50 @@ document.querySelectorAll('.reveal').forEach(el => io.observe(el));
     glow.style.transform = 'translate(' + (e.clientX - r.left - 260) + 'px,' + (e.clientY - r.top - 260) + 'px)';
   });
 })();
+
+// Custom select (inquiry type dropdown)
+(function () {
+  const root = document.querySelector('.custom-select');
+  if (!root) return;
+  const btn = root.querySelector('.cs-button');
+  const list = root.querySelector('.cs-list');
+  const value = root.querySelector('.cs-value');
+  const hidden = root.querySelector('input[type="hidden"]');
+  const options = Array.from(list.querySelectorAll('[role="option"]'));
+  let open = false, hi = 0;
+
+  function highlight(i) {
+    options.forEach((o, j) => o.classList.toggle('highlight', i === j));
+    const el = options[i];
+    if (el) el.scrollIntoView({ block: 'nearest' });
+  }
+  function setOpen(v) {
+    open = v;
+    list.hidden = !v;
+    btn.setAttribute('aria-expanded', String(v));
+    if (v) {
+      hi = Math.max(0, options.findIndex(o => o.getAttribute('aria-selected') === 'true'));
+      highlight(hi);
+    }
+  }
+  function choose(i) {
+    options.forEach(o => { o.setAttribute('aria-selected', 'false'); o.classList.remove('selected'); });
+    const o = options[i];
+    o.setAttribute('aria-selected', 'true');
+    o.classList.add('selected');
+    value.textContent = o.textContent;
+    hidden.value = o.dataset.value;
+    setOpen(false);
+    btn.focus();
+  }
+  btn.addEventListener('click', () => setOpen(!open));
+  options.forEach((o, i) => o.addEventListener('click', () => choose(i)));
+  document.addEventListener('click', e => { if (open && !root.contains(e.target)) setOpen(false); });
+  document.addEventListener('keydown', e => {
+    if (!open) return;
+    if (e.key === 'Escape') setOpen(false);
+    else if (e.key === 'ArrowDown') { e.preventDefault(); hi = (hi + 1) % options.length; highlight(hi); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); hi = (hi - 1 + options.length) % options.length; highlight(hi); }
+    else if (e.key === 'Enter') { e.preventDefault(); choose(hi); }
+  });
+})();
