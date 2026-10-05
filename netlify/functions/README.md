@@ -22,7 +22,7 @@ prompt refuses out-of-scope questions and treats user input as untrusted.
    dialog, that is the paid flow).
 2. In the Netlify dashboard: Site settings > Environment variables >
    add `GEMINI_API_KEY` with your key.
-   Optional: `GEMINI_MODEL` (default `gemini-2.0-flash`).
+   Optional: `GEMINI_MODEL` (default `gemini-flash-latest`).
 2. Deploy this folder with the site (drag-drop ZIP works; `netlify/functions`
    is auto-detected).
 3. Without the key, the widget shows "Chat is not set up yet" and the

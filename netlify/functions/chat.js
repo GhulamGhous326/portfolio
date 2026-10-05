@@ -70,7 +70,7 @@ exports.handler = async (event) => {
     return json(400, { error: 'bad_request' });
   }
 
-  const model = process.env.GEMINI_MODEL || 'gemini-2.0-flash';
+  const model = process.env.GEMINI_MODEL || 'gemini-flash-latest';
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
 
   let resp;
