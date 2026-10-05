@@ -1,0 +1,40 @@
+{
+  "name": "Ghulam Ghous",
+  "title": "Frontend Developer",
+  "location": "Lahore, Pakistan (PKT, UTC+5)",
+  "email": "ghulamghous208@mail.com",
+  "github": "https://github.com/GhulamGhous326",
+  "linkedin": "https://www.linkedin.com/in/ghulamghous208/",
+  "whatsapp": "https://wa.me/923101714299",
+  "portfolio": "https://ghulamghousdev.netlify.app/",
+  "education": "Associate Degree in Computer Science (ADP-CS), Government College University, Faisalabad (Nov 2023 - Oct 2025), 3.5 CGPA",
+  "summary": "Junior frontend developer with hands-on experience in HTML, CSS and JavaScript, building responsive and user-friendly web interfaces. Focuses on responsive design, DOM manipulation and UI logic. Currently learning the MERN stack.",
+  "skills": {
+    "core": ["HTML5", "CSS3", "JavaScript (ES6+)", "WordPress", "WooCommerce", "Elementor", "Responsive Design"],
+    "tooling": ["Git & GitHub", "Netlify", "Tailwind CSS"],
+    "learning": ["MERN stack (MongoDB, Express, React, Node.js)", "REST APIs", "AI chat interfaces"]
+  },
+  "projects": [
+    {
+      "name": "Rook.pk",
+      "url": "https://rook.pk/",
+      "type": "Production project",
+      "description": "Live WooCommerce clothing store for Rook, a Pakistani streetwear brand. Designed and developed independently on WordPress and WooCommerce, with shop-by-category banners, product carousels, deal countdowns and cash-on-delivery checkout, finished with custom CSS and JavaScript."
+    },
+    {
+      "name": "Luxe Boutique",
+      "url": "https://luxeboutiquee.netlify.app/",
+      "type": "Practice build",
+      "description": "Practice e-commerce front end exploring luxury-brand layout, smooth UI transitions and responsive design, built with HTML, CSS and JavaScript."
+    },
+    {
+      "name": "College Website Clone",
+      "url": "https://collegewebsiteclone.netlify.app/",
+      "type": "Practice build",
+      "description": "Front-end clone of a college website, built to practice complex layout structure and responsive principles with HTML, CSS and JavaScript."
+    }
+  ],
+  "availability": "Open to full-time roles, freelance projects, contract and remote work. Usually replies within a day.",
+  "rates": "No public rates listed. Ask via the contact page.",
+  "contact_fallback": "I don't know that. Here's how to reach Ghulam: email ghulamghous208@mail.com or use the contact page at https://ghulamghousdev.netlify.app/contact.html"
+}
