@@ -84,7 +84,7 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
         contents: messages,
-        generationConfig: { maxOutputTokens: 300, temperature: 0.4 },
+        generationConfig: { maxOutputTokens: 180, temperature: 0.4 },
       }),
     });
   } catch {
