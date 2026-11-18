@@ -74,6 +74,8 @@ exports.handler = async (event) => {
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`;
 
   let resp;
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 20000);
   try {
     resp = await fetch(url, {
       method: 'POST',
@@ -84,11 +86,14 @@ exports.handler = async (event) => {
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: SYSTEM_PROMPT }] },
         contents: messages,
-        generationConfig: { maxOutputTokens: 180, temperature: 0.4 },
+        generationConfig: { maxOutputTokens: 600, temperature: 0.4 },
       }),
+      signal: controller.signal,
     });
   } catch {
     return json(502, { error: 'upstream_error' });
+  } finally {
+    clearTimeout(timeout);
   }
 
   if (!resp.ok) {
@@ -106,6 +111,11 @@ exports.handler = async (event) => {
   } catch {
     return json(502, { error: 'upstream_error' });
   }
+
+  // Log finishReason so truncated replies are diagnosable in Netlify logs
+  // (MAX_TOKENS means the token cap cut the reply short).
+  const finishReason = data.candidates && data.candidates[0] ? data.candidates[0].finishReason : null;
+  if (finishReason) console.log('chat finishReason:', finishReason);
 
   let reply = '';
   try {

@@ -10,7 +10,7 @@
 - WhatsApp: https://wa.me/923101714299
 
 ## Projects
-- Rook.pk (https://rook.pk/): live WooCommerce clothing store for a Pakistani streetwear brand, developed independently on WordPress and WooCommerce. Case study: https://ghulamghousdev.netlify.app/projects/rook-pk.html
+- Rook.pk (https://rook.pk/): WooCommerce clothing store for a Pakistani streetwear brand, developed independently on WordPress and WooCommerce. Case study: https://ghulamghousdev.netlify.app/projects/rook-pk.html
 - Luxe Boutique (https://luxeboutiquee.netlify.app/): practice e-commerce front end in HTML/CSS/JavaScript.
 - College Website Clone (https://collegewebsiteclone.netlify.app/): practice build focused on layout and responsive design.
 - TaskBoard (live demo: https://ghous-taskboard.netlify.app/): task dashboard demo built with React 18, TypeScript and Vite (search, filter, sort, calendar view, tags, 21 Vitest unit tests). Case study: https://ghulamghousdev.netlify.app/projects/taskboard.html

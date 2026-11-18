@@ -5,6 +5,7 @@
   var ENDPOINT = '/.netlify/functions/chat';
   var MAX_LEN = 500;
   var HISTORY_LIMIT = 10;
+  var FETCH_TIMEOUT_MS = 20000;
 
   var CHAT_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M21 12a8 8 0 0 1-8 8H5l-2 2V12a8 8 0 0 1 8-8h2a8 8 0 0 1 8 8z"/><path d="M9 11h.01M13 11h.01M17 11h.01"/></svg>';
   var SEND_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>';
@@ -103,32 +104,26 @@
       text.textContent = 'Chat service not found. It works only on the deployed site, not in local preview.';
     } else if (kind === 'rate_limited') {
       text.textContent = 'Too many messages right now. Please try again in a bit.';
-    } else if (kind === 'upstream_key') {
-      text.textContent = 'Chat key issue (400). The site owner should check the API key value.';
-    } else if (kind === 'upstream_forbidden') {
-      text.textContent = 'Chat key blocked (403). The site owner should check key restrictions.';
-    } else if (kind === 'upstream_model') {
-      text.textContent = 'Chat model issue (404). The site owner should update the model name.';
+    } else if (kind === 'timeout') {
+      text.textContent = 'Reply timed out. Please try again.';
     } else if (kind === 'upstream_quota') {
       text.textContent = 'Chat is over its free quota right now. Please try again later.';
-    } else if (kind === 'upstream_noreply') {
-      text.textContent = 'Chat returned no reply. Please try again.';
     } else {
-      text.textContent = 'Something went wrong. ';
+      // Generic user-facing copy for every other failure (key, model, network,
+      // empty reply): never leak internal details to visitors.
+      text.textContent = 'Chat is unavailable right now. Please try again.';
+    }
+    bubble.appendChild(text);
+    // Retry on every error except not_configured / not_found (retrying those cannot help).
+    if (kind !== 'not_configured' && kind !== 'not_found') {
       var retry = el('button', 'chat-retry', 'Retry');
       retry.type = 'button';
       retry.addEventListener('click', function () {
         row.remove();
         if (lastFailed) { var q = lastFailed; lastFailed = null; send(q); }
       });
-      bubble.appendChild(text);
       bubble.appendChild(retry);
-      row.appendChild(bubble);
-      msgs.appendChild(row);
-      scrollDown();
-      return;
     }
-    bubble.appendChild(text);
     row.appendChild(bubble);
     msgs.appendChild(row);
     scrollDown();
@@ -176,11 +171,15 @@
     scrollDown();
     setSending(true);
 
+    var controller = new AbortController();
+    var fetchTimer = setTimeout(function () { controller.abort(); }, FETCH_TIMEOUT_MS);
     fetch(ENDPOINT, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ messages: history })
+      body: JSON.stringify({ messages: history }),
+      signal: controller.signal
     }).then(function (r) {
+      clearTimeout(fetchTimer);
       if (r.status === 404) return { status: 404, data: { error: 'not_found' } };
       return r.json().then(
         function (data) { return { status: r.status, data: data }; },
@@ -193,17 +192,18 @@
         var bubble = addMsg('assistant', '');
         history.push({ role: 'assistant', content: res.data.reply });
         history = history.slice(-HISTORY_LIMIT);
-        typewrite(bubble, res.data.reply);
+        typewrite(bubble, res.data.reply, function () { suggestBox.style.display = ''; });
       } else {
         lastFailed = q;
         addError(res.data && res.data.error);
         history.pop();
       }
-    }).catch(function () {
+    }).catch(function (err) {
+      clearTimeout(fetchTimer);
       thinking.remove();
       setSending(false);
       lastFailed = q;
-      addError('network');
+      addError(err && err.name === 'AbortError' ? 'timeout' : 'network');
       history.pop();
     });
   }
